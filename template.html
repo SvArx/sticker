@@ -1,0 +1,74 @@
+{{ define "index" }}
+<!DOCTYPE html>
+<html lang="en">
+  {{ template "header" . }}
+  <body>
+    {{ template "nav" . }}
+
+    <h1>HTMX Hello World Example</h1>
+  </body>
+</html>
+{{end}} {{ define "contact" }}
+<!DOCTYPE html>
+<html lang="en">
+  {{ template "header" . }}
+  <body>
+    {{ template "nav" . }}
+
+    <h1>Kontakt</h1>
+  </body>
+</html>
+{{ end }} {{ define "shop" }}
+<!DOCTYPE html>
+<html lang="en">
+  {{ template "header" . }}
+  <body>
+    {{ template "nav" . }}
+
+    <h1>Shop</h1>
+
+    <h2>Products</h2>
+
+    <div class="product-container">
+      <img
+        src="/static/sticker.jpg"
+        alt="Product Image"
+        class="product-image"
+      />
+      <div class="price-tag">$19.99</div>
+      <button class="buy-button">Buy</button>
+    </div>
+  </body>
+</html>
+{{ end }} {{ define "cart" }}
+<!DOCTYPE html>
+<html lang="en">
+  {{ template "header" . }}
+  <body>
+    {{ template "nav" . }}
+
+    <h1>Einkaufswagen</h1>
+
+    <h2>Produkte im Einkaufswagen</h2>
+
+    <!-- TODO show cart conntent and total -->
+  </body>
+</html>
+{{ end }} {{ define "nav" }}
+<nav class="navbar">
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/shop">Shop</a></li>
+    <li><a href="/contact">Kontakt</a></li>
+    <li><a href="/cart">Einkaufswagen</a></li>
+  </ul>
+</nav>
+{{ end }} {{ define "header" }}
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bitte keine Werbung Aufkleber</title>
+  <script src="https://unpkg.com/htmx.org@1.5.0"></script>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+{{ end }}
