@@ -36,7 +36,7 @@
         class="product-image"
       />
       <div class="price-tag">$19.99</div>
-      <button class="buy-button">Buy</button>
+      <button hx-get="/cart/addtocart/test_sticker" hx-trigger="click" class="buy-button">Buy</button>
     </div>
   </body>
 </html>
@@ -59,8 +59,8 @@
   <ul class="nav-links">
     <li><a href="/">Home</a></li>
     <li><a href="/shop">Shop</a></li>
-    <li><a href="/contact">Kontakt</a></li>
     <li><a href="/cart">Einkaufswagen</a></li>
+    <li><a href="/contact">Kontakt</a></li>
   </ul>
 </nav>
 {{ end }} {{ define "header" }}

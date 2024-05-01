@@ -1,11 +1,15 @@
 package main
 
 import (
+	"encoding/json"
 	"html/template"
 	"io"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
+	"strconv"
+	"time"
 
 	"github.com/labstack/echo/v4"
 	//"github.com/labstack/echo/v4/middleware"
@@ -77,6 +81,32 @@ func initDB() *gorm.DB {
 	return db
 }
 
+func add_to_cart(c echo.Context, product string, quantity uint) {
+	const cookie_name = "cart"
+	cart_data := map[string]uint{}
+
+	//cookie, _ := c.Cookie(cookie_name)
+	cookie := new(http.Cookie)
+	cookie.Name = cookie_name
+
+	value, _ := url.QueryUnescape(cookie.Value)
+	log.Print(value)
+
+
+	cart_data[product] = quantity
+
+	jsonData, err := json.Marshal(cart_data)
+	if err != nil {
+		log.Fatal("failed to marshal cookie")
+	}
+
+	encodedData := url.QueryEscape(string(jsonData))
+	cookie.Value = encodedData
+
+	cookie.Expires = time.Now().Add(time.Hour * COOKIE_LIFE_TIME_HOUERS)
+	c.SetCookie(cookie)
+}
+
 func main() {
 	db := initDB()
 	sqlDB, err := db.DB()
@@ -107,9 +137,25 @@ func main() {
 		return c.Render(http.StatusOK, "cart", nil)
 	})
 
+	e.GET("/cart/addtocart/:id", func(c echo.Context) error {
+		product_id := c.Param("id")
+
+		add_to_cart(c,product_id,1)
+		return c.String(http.StatusOK, "Product added to cart")
+	})
+
+	e.GET("/cart/addtocart/:id/:quantity", func(c echo.Context) error {
+		product_id := c.Param("id")
+		quantity, err := strconv.ParseUint(c.Param("quantity"), 10, 32)
+		if err != nil {
+			return err
+		}
+
+		add_to_cart(c, product_id, uint(quantity))
+		return c.String(http.StatusOK, "Product added to cart")
+	})
 
 	e.Static("/static", "static")
-
 
 	e.Logger.Fatal(e.Start(":1234"))
 }

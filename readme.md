@@ -1,7 +1,6 @@
 # Project "Keine Werbung Sticker Droppshiping"
 
 ### Frontend
-- Hook up buy button to api cart update endpoint
 - Add all the Purchasing Info to the Payment
 - Cart Checkout page
 - Contact Form storing to DB
@@ -18,6 +17,12 @@
 - Integrate DB
 - Email to Purchaser
 - make it so multiple of the same sticker can be added in one request to the cart
+
+### Cart
+- Set number in corner of cart icon and have it update with number of items
+
+### Shop
+- If buy button is presed more than once add multiple stickers to cart
 
 ### OPS
 - Docker Image
