@@ -21,9 +21,6 @@
 ### Cart
 - Set number in corner of cart icon and have it update with number of items
 
-### Shop
-- If buy button is presed more than once add multiple stickers to cart
-
 ### OPS
 - Docker Image
 - Backup of Sales
@@ -61,11 +58,10 @@
 - Display the total price
 - Checkout Button
 - Adress Form Google maps or other maps API powered
-- How long to persist task <- adjust constant COOKIE_LIFE_TIME_HOUERS 
-- api add to cart endpoint handle unparsable cookies in a better way
+- How long to persist task <- adjust constant COOKIE_LIFE_TIME_HOUERS
 
 ### Purchasing Page
-- Allow for 
+- Allow for
 - Display total price
 
 ### CSS design
@@ -75,4 +71,3 @@
 - remove sticker image and replae by own sticker image
 - testcoverage
 - make sure cookies are protected against cross site scripting
-

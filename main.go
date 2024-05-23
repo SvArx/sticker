@@ -12,7 +12,6 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
-	//"github.com/labstack/echo/v4/middleware"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -81,30 +80,49 @@ func initDB() *gorm.DB {
 	return db
 }
 
-func add_to_cart(c echo.Context, product string, quantity uint) {
-	const cookie_name = "cart"
-	cart_data := map[string]uint{}
+func Add(a, b int) int {
+	return a + b
+}
 
-	//cookie, _ := c.Cookie(cookie_name)
-	cookie := new(http.Cookie)
-	cookie.Name = cookie_name
-
-	value, _ := url.QueryUnescape(cookie.Value)
-	log.Print(value)
-
-
-	cart_data[product] = quantity
-
-	jsonData, err := json.Marshal(cart_data)
+func serialize_cart(cart map[string]uint) string {
+	serialized, err := json.Marshal(cart)
 	if err != nil {
-		log.Fatal("failed to marshal cookie")
+		log.Fatal("failed to serialize cart")
+		os.Exit(1)
+	}
+	return string(serialized)
+}
+
+func deserialize_cart(cart string) map[string]uint {
+	deserialized := make(map[string]uint)
+	err := json.Unmarshal([]byte(cart), &deserialized)
+	if err != nil {
+		return make(map[string]uint)
+	}
+	return deserialized
+}
+
+func add_to_cart(c echo.Context, product string, quantity uint) error {
+	cookie, err := c.Cookie("cart")
+	if err != nil {
+		cookie = new(http.Cookie)
+		cookie.Name = "cart"
+		emptyCart := make(map[string]uint)
+		cookie.Value = url.QueryEscape(serialize_cart(emptyCart))
 	}
 
-	encodedData := url.QueryEscape(string(jsonData))
-	cookie.Value = encodedData
+	unescaped_value, err := url.QueryUnescape(cookie.Value)
+	if err != nil {
+		log.Fatal("failed to unescape cookie value")
+		os.Exit(1)
+	}
+	cart := deserialize_cart(unescaped_value)
+	cart[product] += quantity
 
-	cookie.Expires = time.Now().Add(time.Hour * COOKIE_LIFE_TIME_HOUERS)
+	cookie.Value = url.QueryEscape(serialize_cart(cart))
+	cookie.Expires = time.Now().Add(COOKIE_LIFE_TIME_HOUERS * time.Hour)
 	c.SetCookie(cookie)
+	return c.String(http.StatusOK, "Product added to cart")
 }
 
 func main() {
@@ -140,7 +158,7 @@ func main() {
 	e.GET("/cart/addtocart/:id", func(c echo.Context) error {
 		product_id := c.Param("id")
 
-		add_to_cart(c,product_id,1)
+		add_to_cart(c, product_id, 1)
 		return c.String(http.StatusOK, "Product added to cart")
 	})
 
