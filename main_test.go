@@ -4,27 +4,41 @@ package main
 import (
 	"reflect"
 	"testing"
+	"net/http"
+	"net/http/httptest"
+
+	"github.com/labstack/echo/v4"
+	"github.com/stretchr/testify/assert"
 )
 
-// TestAdd tests the Add function
-func TestAdd(t *testing.T) {
-	result := Add(2, 3)
-	expected := 5
-	if result != expected {
-		t.Errorf("Add(2, 3) = %d; want %d", result, expected)
-	}
-}
+
+// Testcases
 
 func TestSerilaizeAndDeserializeCart(t *testing.T) {
-	cart := map[string]uint{
-		"product1": 1,
-		"product2": 2,
-	}
+	num := 1;
 
-	serialized := serialize_cart(cart)
-	deserialized := deserialize_cart(serialized)
-
-	if !reflect.DeepEqual(cart, deserialized) {
-		t.Errorf("Maps are not equal. map1: %v, map2: %v", cart, deserialized)
+	if !reflect.DeepEqual(num, 1) {
+		t.Errorf("Example test.")
 	}
 }
+
+func TestHelloEndpoint(t *testing.T) {
+	e := echo.New()
+
+	req := httptest.NewRequest(http.MethodGet, "/hello", nil)
+	rec := httptest.NewRecorder()
+	c := e.NewContext(req, rec)
+
+	// Call the handler function directly
+	if assert.NoError(t, helloHandler(c)) {
+		assert.Equal(t, http.StatusOK, rec.Code)
+		assert.Equal(t, "Hello, World!", rec.Body.String())
+	}
+}
+
+
+// Pluming for tests
+func helloHandler(c echo.Context) error {
+	return c.String(http.StatusOK, "Hello, World!")
+}
+

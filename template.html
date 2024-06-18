@@ -36,7 +36,7 @@
         class="product-image"
       />
       <div class="price-tag">$19.99</div>
-      <button hx-get="/cart/addtocart/test_sticker" hx-trigger="click" class="buy-button">Buy</button>
+      <button hx-get="/cart/addtocart/10" hx-trigger="click" class="buy-button">Buy</button>
     </div>
   </body>
 </html>
@@ -50,6 +50,28 @@
     <h1>Einkaufswagen</h1>
 
     <h2>Produkte im Einkaufswagen</h2>
+
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Preis pro</th>
+        <th>menge </th>
+        <th>preis total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>John</td>
+        <td>Doe</td>
+        <td>25</td>
+        <td>25</td>
+      </tr>
+    </tbody>
+
+    <br>
+
+    Total: {{.Total}}
+
 
     <!-- TODO show cart conntent and total -->
   </body>
