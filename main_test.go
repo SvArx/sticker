@@ -41,3 +41,59 @@ func TestIndex(t *testing.T){
 }
 
 // Test Module
+
+func TestAmountItemTotalPrice(t *testing.T){
+	aItem := exampleAmountItem()
+	assert.Equal(t,aItem.totalPrice(),300)
+}
+
+func TestCartTotalPrice(t *testing.T){
+	cart := exampleCart()
+	assert.Equal(t,cart.totalPrice(),760)
+}
+
+// Helpers
+
+func exampleItem()Item{
+	item := Item{
+		23,
+		"special sticker",
+		100,
+	}
+	return item
+}
+
+func exampleAmountItem() AmountItem{
+	amountItem := AmountItem{
+		3,
+		exampleItem(),
+	}
+	return amountItem
+}
+
+func otherExampleItem()Item{
+	item := Item{
+		34,
+		"dragon sticker",
+		230,
+	}
+	return item
+}
+
+func otherExampleAmountItem() AmountItem{
+	amountItem := AmountItem{
+		2,
+		otherExampleItem(),
+	}
+	return amountItem
+}
+
+func exampleCart() Cart{
+	cart := Cart{
+		[]AmountItem{
+			exampleAmountItem(),
+			otherExampleAmountItem(),
+		},
+	}
+	return cart
+}

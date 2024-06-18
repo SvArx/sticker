@@ -8,6 +8,33 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+type Item struct {
+	prodID uint
+	prodName string
+	price_rp int
+}
+
+type AmountItem struct {
+	amount uint
+	item Item
+}
+
+func (aItem AmountItem) totalPrice() int{
+	return aItem.item.price_rp * int(aItem.amount)
+}
+
+
+type Cart struct {
+	items []AmountItem
+}
+
+func (c Cart) totalPrice() int{
+	acc := 0
+	for _,aItem := range c.items{
+		acc += aItem.totalPrice()
+	}
+	return acc
+}
 
 type Templates struct {
 	templates *template.Template
