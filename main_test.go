@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"net/http/httptest"
 
-	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -23,22 +22,15 @@ func TestSerilaizeAndDeserializeCart(t *testing.T) {
 }
 
 func TestHelloEndpoint(t *testing.T) {
-	e := echo.New()
+	e := setUpUrlHandlers()
 
-	req := httptest.NewRequest(http.MethodGet, "/hello", nil)
+	req := httptest.NewRequest(http.MethodGet, "/HelloWorld", nil)
 	rec := httptest.NewRecorder()
+
 	c := e.NewContext(req, rec)
 
-	// Call the handler function directly
-	if assert.NoError(t, helloHandler(c)) {
+	if assert.NoError(t, c.String(http.StatusOK, "Hello World")) {
 		assert.Equal(t, http.StatusOK, rec.Code)
-		assert.Equal(t, "Hello, World!", rec.Body.String())
+		assert.Equal(t, "Hello World", rec.Body.String())
 	}
 }
-
-
-// Pluming for tests
-func helloHandler(c echo.Context) error {
-	return c.String(http.StatusOK, "Hello, World!")
-}
-

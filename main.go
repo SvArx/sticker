@@ -23,7 +23,7 @@ func newTemplates() *Templates {
 	}
 }
 
-func main() {
+func setUpUrlHandlers() *echo.Echo {
 	e := echo.New()
 	//e.Use(middleware.Logger())
 
@@ -36,8 +36,14 @@ func main() {
 	e.GET("/HelloWorld",func(c echo.Context) error{
 		return c.String(http.StatusOK,"Hello World")
 	})
-
+	
 	e.Static("/static", "static")
+
+	return e;
+}
+
+func main() {
+	e := setUpUrlHandlers()
 
 	e.Logger.Fatal(e.Start(":1234"))
 }
