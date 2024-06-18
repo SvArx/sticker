@@ -2,35 +2,42 @@
 package main
 
 import (
-	"reflect"
-	"testing"
 	"net/http"
 	"net/http/httptest"
+	"testing"
 
+	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 )
 
-
-// Testcases
-
-func TestSerilaizeAndDeserializeCart(t *testing.T) {
-	num := 1;
-
-	if !reflect.DeepEqual(num, 1) {
-		t.Errorf("Example test.")
-	}
-}
-
-func TestHelloEndpoint(t *testing.T) {
+// Testing Helpers
+func runRequest(req *http.Request) (echo.Context, *httptest.ResponseRecorder){
 	e := setUpUrlHandlers()
 
-	req := httptest.NewRequest(http.MethodGet, "/HelloWorld", nil)
 	rec := httptest.NewRecorder()
 
 	c := e.NewContext(req, rec)
+
+	return c, rec;
+}
+
+// Test Endpoints
+
+func TestHelloEndpoint(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/HelloWorld", nil)
+	c, rec := runRequest(req)
 
 	if assert.NoError(t, c.String(http.StatusOK, "Hello World")) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 		assert.Equal(t, "Hello World", rec.Body.String())
 	}
 }
+
+func TestIndex(t *testing.T){
+	req := httptest.NewRequest(http.MethodGet, "/", nil)
+	_, rec := runRequest(req)
+
+	assert.Equal(t, http.StatusOK, rec.Code)
+}
+
+// Test Module
